@@ -18,75 +18,33 @@
 
       $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/nyc', function(instagram){
         console.log(instagram);
+        $.getJSON('http://cooper-union-weather-proxy.herokuapp.com/weather/NY/Manhattan', function(wunderground){
+            console.log(wunderground);
+            var lat=wunderground.current_observation.observation_location.latitude;
+            var lon=wunderground.current_observation.observation_location.longitude;
+            var temp=wunderground.current_observation.observation_location.temp_f;
+            for(var index=0; index<instagram.length; index++){
+                if(instagram[index].location !=null && instagram[index].location.latitude===lat && instagram[index].location.longitude===lon)
+                {
+                  instagram[index].temp=temp;
+                }else{
+                  instagram[index].temp=false;
+                }
+                 var img = '<div><img src=' + instagram[index].images.standard_resolution.url + ' />Temp=' + sinstagram[index].temp + '</div>';
+                $("body").append(img);
 
-        for(var i=0; i<instagram.length; i++) {
-          var img = '<img src=' + instagram[i].images.standard_resolution.url + ' />';
-          $("body").append(img);
-
-            //if the instagram photo has location
-            if(instagram[i].location != null) {
-              //do something with only the photos that contain a location
-              $("body").append('<p>'+instagram[i].location.latitude + ' ' + instagram[i].location.longitude+'</p>');
-
-              //take the lat/long, find it in wunderground and add transparent letters to images
-                $.getJSON('http://cooper-union-weather-proxy.herokuapp.com/weather/NY/Manhattan', function(wunderground){
-                    console log(wunderground);
-                    
-                    for(instagram[i].location.latitude= display_location.latitude && instagram[i].location.longitude) {
-                          var degree= temp_f[i]
-                          $("body").append(img + degree)
-                          }
-
-
-                //z index: auto and css font-size:100px; div.transbox
-               // [wunderground.lattitude: instagram[i].location.latitude;
-               // wunderground.longitude: instagram[i].location.longitude;
-                 //]
-                 //latitude: "40.75013351",
-                //longitude: "-73.99700928",
-
-//display_location: {
-//full: "Manhattan, NY",
-//city: "Manhattan",
-//state: "NY",
-//state_name: "New York",
-//country: "US",
-//country_iso3166: "US",
-//zip: "10001",
-//magic: "2",
-//wmo: "99999",
-//latitude: "40.75013351",
-//longitude: "-73.99700928",
-//elevation: "17.00000000"
-
-//estimated: { },
-//station_id: "KNYNEWYO71",
-//observation_time: "Last Updated on November 13, 1:06 PM EST",
-//observation_time_rfc822: "Thu, 13 Nov 2014 13:06:53 -0500",
-//observation_epoch: "1415902013",
-//local_time_rfc822: "Thu, 13 Nov 2014 13:07:01 -0500",
-//local_epoch: "1415902021",
-//local_tz_short: "EST",
-//local_tz_long: "America/New_York",
-//local_tz_offset: "-0500",
-//weather: "Overcast",
-//temperature_string: "47.5 F (8.6 C)",
-//temp_f: 47.5,
-//temp_c: 8.6,
-},
-              }
-
-              
+                
 
             }
 
-          // var location = '<p>' + response[i].location.latitude + ', ' + response[i].location.longitude + '</p>';
-          // $("body").append(location);
         }
 
-      })
+      }
 
-    });
+
+
+
+
 
     </script>
   </head>
