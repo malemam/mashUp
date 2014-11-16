@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,33 +17,31 @@
 
       $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/nyc', function(instagram){
         console.log(instagram);
+         var insta
+       
         $.getJSON('http://cooper-union-weather-proxy.herokuapp.com/weather/NY/Manhattan', function(wunderground){
             console.log(wunderground);
             var lat=wunderground.current_observation.observation_location.latitude;
             var lon=wunderground.current_observation.observation_location.longitude;
-            var temp=wunderground.current_observation.observation_location.temp_f;
-            for(var index=0; index<instagram.length; index++){
-                if(instagram[index].location !=null && instagram[index].location.latitude===lat && instagram[index].location.longitude===lon)
+            var currentTemp=wunderground.current_observation.observation_location.temp_f;
+            for(var i=0; i<instagram.length; i++){
+                if(instagram[i].location !=null && instagram[i].location.latitude ===lat && instagram[i].location.longitude===lon)
                 {
-                  instagram[index].temp=temp;
+                  instagram[i].temp=currentTemp;
                 }else{
-                  instagram[index].temp=false;
+                  instagram[i].temp=false;
                 }
-                 var img = '<div><img src=' + instagram[index].images.standard_resolution.url + ' />Temp=' + sinstagram[index].temp + '</div>';
-                $("body").append(img);
+                 var img = '<div><img src=' + instagram[i].images.standard_resolution.url + ' />Temp=' + instagram[i].temp + '</div>';
+                $("body").append(img)
 
-                
+                }
+                console.log()
 
-            }
+            });
 
-        }
+        });
 
-      }
-
-
-
-
-
+      });
 
     </script>
   </head>
