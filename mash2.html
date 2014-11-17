@@ -21,13 +21,16 @@
        
         $.getJSON('http://cooper-union-weather-proxy.herokuapp.com/weather/NY/Manhattan', function(wunderground){
             console.log(wunderground);
-            var lat=wunderground.current_observation.observation_location.latitude.toPercision(2);
-            var lon=wunderground.current_observation.observation_location.longitude.toPercision(2);
+            var lat=wunderground.current_observation.observation_location.latitude.toPrecision(2);
+            var lon=wunderground.current_observation.observation_location.longitude.toPrecision(2);
             var currentTemp=wunderground.current_observation.observation_location.temp_f;
+
+            //var preciseNumber = 40.123456;
+            //var lessPreciseNumber = preciseNumber.toPrecision(5); //40.123
             for(var i=0; i<instagram.length; i++){
-                if(instagram[i].location !=null && instagram[i].location.latitude.toPercision(2) ===lat && instagram[i].location.longitude.toPercision(2)===lon)
+                if(instagram[i].location !=null && instagram[i].location.latitude ===lat && instagram[i].location.longitude===lon)
                 {
-                  instagram[i].temp=currentTemp;
+                  instagram[i].temp=currentTemp.toPrecision(2);
                 }else{
                   instagram[i].temp=false;
                 }

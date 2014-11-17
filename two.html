@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>instagram &nbsp; Wunderground</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+    $(document).ready(function(){
+
+      $.getJSON('http://cooper-union-instagram-proxy.herokuapp.com/search/tag/nyc', function(instagram){
+        // console.log(instagram);
+
+
+        //loop through the photos
+        var manualCounter = 0;
+        for(var i=0; i<instagram.length; i++) {
+          if(instagram[i].location !== null) {
+            var instaImg = instagram[i].images.standard_resolution.url
+            var images = instagram[manualCounter].images.standard_resolution.url;
+            var lat = instagram[i].location.latitude;
+            var lon = instagram[i].location.longitude;
+            var weatherLocationUrl = 'http://cooper-union-weather-proxy.herokuapp.com/location/' + lat + '/' + lon;
+
+            $.getJSON(weatherLocationUrl, function(statecity){
+              // console.log(statecity);
+
+              var state = statecity.location.state;
+              var city = statecity.location.city;
+
+              var weatherForPhotoUrl = 'http://cooper-union-weather-proxy.herokuapp.com/weather/' + state + '/' + city;
+              $.getJSON(weatherForPhotoUrl, function(wunderground){
+
+              var instaWeather = wunderground.current_observation.temp_f;
+
+                
+
+
+
+                //console logging the temperature of a particular city, and a photo of that city
+                console.log(wunderground.current_observation.temp_f, instagram[manualCounter])
+
+
+          var img = '<div><img src=' + instaImg + ' /> Temp=' + instaWeather + '</div>';
+                $("body").append(img)
+                //at this point, your variables are:
+                //wunderground has weather for the specific city that a photo was taken in
+                //instagram[manualCounter] will still work, even this deeploy nested
+
+                //we have to use a manual counter here for reasons that are hard to explain in code
+                //but basically, the usual 'i' variable you'd use gets to 15 (how many photos there are) too quickly
+                //so we count manually, after each final getJSON happens.
+                
+
+
+
+
+                manualCounter++;
+              });
+
+            });
+
+
+          }
+        }
+
+      });
+
+    });
+
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
